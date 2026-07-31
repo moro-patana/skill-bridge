@@ -1,178 +1,187 @@
-'use client';
+"use client";
 
-import Navbar from '../components/Navbar';
-import { useState } from 'react';
-import { Send, Calendar, Phone, Video } from 'lucide-react';
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Navbar from "@/components/Navbar";
+import { Send } from "lucide-react";
+import { useState } from "react";
 
-interface Message {
-    id: number;
-    text: string;
-    isOwn: boolean;
-    time: string;
-}
-
-const mockMatches = [
+const mockConversations = [
     {
         id: 1,
-        name: "Sarah Chen",
-        avatar: "https://i.pravatar.cc/150?img=1",
-        lastMessage: "Hey! Are you free this weekend to swap skills?",
+        name: "Sarah Martinez",
+        lastMessage: "That sounds great! When would you like to have our first session?",
         time: "2m ago",
         unread: 2,
-        teachSkill: "React",
-        learnSkill: "Photography"
     },
     {
         id: 2,
-        name: "Rivo Andrian",
-        avatar: "https://i.pravatar.cc/150?img=2",
-        lastMessage: "I really liked your Tailwind tips last time!",
+        name: "David Kim",
+        lastMessage: "I'm available Tuesday and Thursday evenings",
         time: "1h ago",
         unread: 0,
-        teachSkill: "UI/UX",
-        learnSkill: "Backend"
+    },
+    {
+        id: 3,
+        name: "Maria Rodriguez",
+        lastMessage: "¡Perfecto! Let's start with basic grammar",
+        time: "3h ago",
+        unread: 1,
     },
 ];
 
-export default function Messages() {
-    const [selectedChat, setSelectedChat] = useState(1);
-    const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Hi Manjaka! I'd love to learn React from you.", isOwn: false, time: "10:32" },
-        { id: 2, text: "Hey Sarah! Sure, I'm happy to teach. What do you want to focus on?", isOwn: true, time: "10:35" },
-        { id: 3, text: "Mainly component design and state management with TypeScript.", isOwn: false, time: "10:37" },
-        { id: 4, text: "Perfect! I can also help you with portrait photography techniques.", isOwn: true, time: "10:38" },
-    ]);
+const mockMessages = [
+    {
+        id: 1,
+        sender: "Sarah Martinez",
+        message: "Hi! I saw we matched on photography and React. Excited to exchange skills!",
+        time: "10:30 AM",
+        isOwn: false,
+    },
+    {
+        id: 2,
+        sender: "You",
+        message: "Hey Sarah! Yes, I'm really looking forward to learning photography from you!",
+        time: "10:32 AM",
+        isOwn: true,
+    },
+    {
+        id: 3,
+        sender: "Sarah Martinez",
+        message: "That's awesome! I've been wanting to learn React for a while now. How should we structure our sessions?",
+        time: "10:35 AM",
+        isOwn: false,
+    },
+    {
+        id: 4,
+        sender: "You",
+        message: "Maybe we could do 1 hour sessions? 30 mins on photography, 30 mins on React?",
+        time: "10:38 AM",
+        isOwn: true,
+    },
+    {
+        id: 5,
+        sender: "Sarah Martinez",
+        message: "That sounds great! When would you like to have our first session?",
+        time: "10:40 AM",
+        isOwn: false,
+    },
+];
+
+const Messages = () => {
+    const [selectedChat, setSelectedChat] = useState(mockConversations[0]);
     const [newMessage, setNewMessage] = useState("");
 
-    const sendMessage = () => {
-        if (!newMessage.trim()) return;
-        setMessages([...messages, {
-            id: messages.length + 1,
-            text: newMessage,
-            isOwn: true,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }]);
-        setNewMessage("");
+    const handleSend = () => {
+        if (newMessage.trim()) {
+            // Mock sending - in real app would send to backend
+            setNewMessage("");
+        }
     };
 
-    const currentChat = mockMatches.find(m => m.id === selectedChat);
-
     return (
-        <>
+        <div className="min-h-screen bg-background">
             <Navbar />
-            <div className="max-w-6xl mx-auto px-6 pt-20 pb-12 h-[calc(100vh-80px)] flex flex-col">
-                <h1 className="text-3xl font-bold text-foreground mb-8">Messages</h1>
 
-                <div className="flex flex-1 gap-6 overflow-hidden">
-                    {/* Chat List */}
-                    <div className="w-full md:w-96 bg-card border border-border rounded-3xl overflow-hidden flex flex-col">
-                        <div className="p-5 border-b border-border">
-                            <input
-                                type="text"
-                                placeholder="Search conversations..."
-                                className="w-full bg-zinc-800 dark:bg-zinc-800 light:bg-white border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none"
-                            />
-                        </div>
+            <div className="container mx-auto px-4 py-8">
+                <h1 className="mb-6 text-4xl font-display font-bold">Messages</h1>
 
-                        <div className="flex-1 overflow-y-auto">
-                            {mockMatches.map((chat) => (
-                                <div
-                                    key={chat.id}
-                                    onClick={() => setSelectedChat(chat.id)}
-                                    className={`p-5 border-b border-border hover:bg-zinc-800 light:hover:bg-zinc-100 cursor-pointer transition-colors ${selectedChat === chat.id ? 'bg-zinc-800 light:bg-zinc-100' : ''
-                                        }`}
-                                >
-                                    <div className="flex gap-4">
-                                        <img
-                                            src={chat.avatar}
-                                            alt={chat.name}
-                                            className="w-12 h-12 rounded-2xl object-cover"
-                                        />
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex justify-between">
-                                                <h3 className="font-semibold text-foreground truncate">{chat.name}</h3>
-                                                <span className="text-xs text-muted-foreground">{chat.time}</span>
+                <div className="grid md:grid-cols-[320px_1fr] gap-4 h-[calc(100vh-240px)]">
+                    {/* Conversations List */}
+                    <Card className="p-4 shadow-card overflow-hidden flex flex-col">
+                        <h2 className="font-display font-bold mb-4">Conversations</h2>
+                        <ScrollArea className="flex-1">
+                            <div className="space-y-2">
+                                {mockConversations.map((conv) => (
+                                    <button
+                                        key={conv.id}
+                                        onClick={() => setSelectedChat(conv)}
+                                        className={`w-full text-left p-3 rounded-lg transition-colors ${selectedChat.id === conv.id
+                                                ? "bg-primary/10 border border-primary/20"
+                                                : "hover:bg-muted"
+                                            }`}
+                                    >
+                                        <div className="flex items-start gap-3">
+                                            <Avatar className="h-10 w-10">
+                                                <AvatarFallback className="bg-gradient-primary text-sm font-bold text-primary-foreground">
+                                                    {conv.name.split(" ").map((n) => n[0]).join("")}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-baseline justify-between mb-1">
+                                                    <p className="font-medium text-sm truncate">{conv.name}</p>
+                                                    <span className="text-xs text-muted-foreground ml-2 shrink-0">{conv.time}</span>
+                                                </div>
+                                                <p className="text-xs text-muted-foreground truncate">{conv.lastMessage}</p>
                                             </div>
-                                            <p className="text-sm text-muted-foreground truncate mt-0.5">{chat.lastMessage}</p>
-                                            <div className="text-xs text-teach mt-2">
-                                                {chat.teachSkill} ↔ {chat.learnSkill}
-                                            </div>
+                                            {conv.unread > 0 && (
+                                                <div className="shrink-0 h-5 w-5 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
+                                                    {conv.unread}
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </Card>
 
-                    {/* Chat Window */}
-                    <div className="hidden md:flex flex-1 flex-col bg-card border border-border rounded-3xl overflow-hidden">
-                        {currentChat && (
-                            <>
-                                <div className="p-6 border-b border-border flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <img
-                                            src={currentChat.avatar}
-                                            alt={currentChat.name}
-                                            className="w-12 h-12 rounded-2xl"
-                                        />
-                                        <div>
-                                            <h3 className="font-semibold text-foreground">{currentChat.name}</h3>
-                                            <p className="text-sm text-teach">
-                                                {currentChat.teachSkill} ↔ {currentChat.learnSkill}
+                    {/* Chat Area */}
+                    <Card className="p-6 shadow-card flex flex-col">
+                        <div className="flex items-center gap-3 pb-4 border-b border-border mb-4">
+                            <Avatar className="h-12 w-12">
+                                <AvatarFallback className="bg-gradient-primary font-bold text-primary-foreground">
+                                    {selectedChat.name.split(" ").map((n) => n[0]).join("")}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <h3 className="font-display font-bold">{selectedChat.name}</h3>
+                                <p className="text-sm text-muted-foreground">Active now</p>
+                            </div>
+                        </div>
+
+                        <ScrollArea className="flex-1 pr-4 mb-4">
+                            <div className="space-y-4">
+                                {mockMessages.map((msg) => (
+                                    <div
+                                        key={msg.id}
+                                        className={`flex ${msg.isOwn ? "justify-end" : "justify-start"}`}
+                                    >
+                                        <div
+                                            className={`max-w-[70%] rounded-2xl px-4 py-2 ${msg.isOwn
+                                                    ? "bg-gradient-primary text-primary-foreground"
+                                                    : "bg-muted text-foreground"
+                                                }`}
+                                        >
+                                            <p className="text-sm">{msg.message}</p>
+                                            <p className={`text-xs mt-1 ${msg.isOwn ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                                                {msg.time}
                                             </p>
                                         </div>
                                     </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
 
-                                    <div className="flex gap-3">
-                                        <button className="p-3 hover:bg-zinc-800 light:hover:bg-zinc-100 rounded-2xl transition-colors">
-                                            <Calendar className="h-5 w-5" />
-                                        </button>
-                                        <button className="p-3 hover:bg-zinc-800 light:hover:bg-zinc-100 rounded-2xl transition-colors">
-                                            <Video className="h-5 w-5" />
-                                        </button>
-                                        <button className="p-3 hover:bg-zinc-800 light:hover:bg-zinc-100 rounded-2xl transition-colors">
-                                            <Phone className="h-5 w-5" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="flex-1 p-6 overflow-y-auto space-y-6 bg-zinc-950 dark:bg-zinc-950 light:bg-zinc-50">
-                                    {messages.map((msg) => (
-                                        <div key={msg.id} className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`max-w-[75%] px-5 py-3 rounded-3xl ${msg.isOwn
-                                                    ? 'bg-gradient-to-r from-teach to-learn text-white rounded-br-none'
-                                                    : 'bg-zinc-800 dark:bg-zinc-800 light:bg-zinc-200 text-foreground rounded-bl-none'
-                                                }`}>
-                                                <p>{msg.text}</p>
-                                                <p className="text-xs opacity-70 text-right mt-1">{msg.time}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="p-6 border-t border-border bg-card">
-                                    <div className="flex gap-3">
-                                        <input
-                                            type="text"
-                                            value={newMessage}
-                                            onChange={(e) => setNewMessage(e.target.value)}
-                                            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                                            placeholder="Type your message..."
-                                            className="flex-1 bg-zinc-800 dark:bg-zinc-800 light:bg-white border border-border rounded-2xl px-5 py-4 focus:outline-none focus:border-teach"
-                                        />
-                                        <button
-                                            onClick={sendMessage}
-                                            className="bg-gradient-to-r from-teach to-learn px-8 rounded-2xl hover:brightness-110 transition-all"
-                                        >
-                                            <Send className="h-5 w-5" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </>
-                        )}
-                    </div>
+                        <div className="flex gap-2">
+                            <Input
+                                placeholder="Type a message..."
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                            />
+                            <Button onClick={handleSend} className="gradient-primary">
+                                <Send className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </Card>
                 </div>
             </div>
-        </>
+        </div>
     );
-}
+};
+
+export default Messages;

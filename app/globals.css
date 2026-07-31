@@ -1,30 +1,175 @@
-@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-@theme {
-  --color-teach: #10b981;
-  --color-learn: #6366f1;
-  --color-bridge: #f59e0b;
+@custom-variant dark (&:is(.dark *));
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
+All colors MUST be HSL. */
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 240 15% 9%;
+
+    --primary: 185 84% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 185 84% 65%;
+
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 221 83% 54%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 20% 95%;
+    --muted-foreground: 240 8% 45%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 15% 9%;
+
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 185 84% 45%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 15% 9%;
+
+    --radius: 0.75rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(185 84% 45%), hsl(185 84% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(217 91% 60%), hsl(221 83% 70%));
+    --gradient-hero: linear-gradient(180deg, hsl(210 20% 98%), hsl(185 84% 97%));
+
+    --shadow-soft: 0 4px 16px -4px hsl(240 15% 9% / 0.08);
+    --shadow-card: 0 8px 24px -8px hsl(240 15% 9% / 0.12);
+    --shadow-glow: 0 0 40px hsl(185 84% 65% / 0.3);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 240 15% 9%;
+    --foreground: 210 20% 98%;
+
+    --primary: 185 84% 55%;
+    --primary-foreground: 240 15% 9%;
+    --primary-glow: 185 84% 75%;
+
+    --secondary: 213 94% 68%;
+    --secondary-foreground: 240 15% 9%;
+
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 240 12% 15%;
+    --muted-foreground: 210 15% 65%;
+
+    --card: 240 12% 12%;
+    --card-foreground: 210 20% 98%;
+
+    --border: 240 12% 18%;
+    --input: 240 12% 18%;
+    --ring: 185 84% 55%;
+
+    --popover: 240 12% 12%;
+    --popover-foreground: 210 20% 98%;
+
+    --gradient-hero: linear-gradient(180deg, hsl(240 15% 9%), hsl(240 12% 12%));
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    font-family: 'Outfit', sans-serif;
+  }
 }
 
-/* Light Mode Support */
-:root {
-  --background: #09090b;
-  --foreground: #e4e4e7;
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-.light {
-  --background: #ffffff;
-  --foreground: #171717;
-  --card: #f4f4f5;
-  --border: #d4d4d8;
+@utility font-display {
+  font-family: 'Outfit', sans-serif;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+@utility font-body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.bridge-glow {
-  box-shadow: 0 0 35px -10px rgb(16 185 129 / 0.4);
+@utility gradient-primary {
+  background: var(--gradient-primary);
+}
+
+@utility gradient-secondary {
+  background: var(--gradient-secondary);
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility transition-smooth {
+  transition: var(--transition-smooth);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
 }

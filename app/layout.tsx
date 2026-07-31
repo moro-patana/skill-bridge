@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "SkillBridge",
@@ -16,8 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-zinc-950 text-zinc-200 min-h-screen">
+      <body className="bg-background text-foreground min-h-screen">
         {children}
+        <Toaster />
       </body>
     </html>
   );

@@ -1,114 +1,68 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Book, Home, Users, MessageCircle, User, Menu, X, Sun, Moon } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Users, MessageSquare, User, Sparkles } from "lucide-react";
 
-export default function Navbar() {
+const Navbar = () => {
     const pathname = usePathname();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isDark, setIsDark] = useState(true);
+    const isActive = (path: string) => pathname === path;
 
-    // Load theme from localStorage on mount
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            setIsDark(false);
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        const newIsDark = !isDark;
-        setIsDark(newIsDark);
-
-        if (newIsDark) {
-            document.documentElement.classList.remove('light');
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-            localStorage.setItem('theme', 'light');
-        }
-    };
-
-    const navLinks = [
-        { href: '/', label: 'Home', icon: Home },
-        { href: '/matches', label: 'Matches', icon: Users },
-        { href: '/messages', label: 'Messages', icon: MessageCircle },
-        { href: '/profile', label: 'Profile', icon: User },
-    ];
+    const isAuthenticated = pathname !== "/" && pathname !== "/login" && pathname !== "/signup";
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-zinc-950 border-b border-zinc-800 dark:bg-zinc-950">
-            <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-                {/* Logo */}
-                <div className="flex items-center gap-3">
-                    <Book className="h-9 w-9 text-teach" />
-                    <div>
-                        <span className="text-2xl font-bold tracking-tight dark:text-white light:text-black">SkillBridge</span>
-                        <p className="text-xs text-teach -mt-1">learn by teaching</p>
+        <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
+            <div className="container mx-auto flex h-16 items-center justify-between px-4">
+                <Link href="/" className="flex items-center gap-2 group">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary shadow-glow transition-smooth group-hover:scale-110">
+                        <Sparkles className="h-5 w-5 text-primary-foreground" />
                     </div>
-                </div>
+                    <span className="text-xl font-display font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        SkillBridge
+                    </span>
+                </Link>
 
-                {/* Desktop Navigation */}
-                <div className="hidden md:flex gap-10 text-sm font-medium">
-                    {navLinks.map(({ href, label, icon: Icon }) => (
-                        <Link
-                            key={href}
-                            href={href}
-                            className={`flex items-center gap-2 transition-colors hover:text-teach ${pathname === href ? 'text-teach' : 'dark:text-zinc-400 light:text-zinc-600'
-                                }`}
+                {isAuthenticated ? (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant={isActive("/matches") ? "default" : "ghost"}
+                            render={<Link href="/matches" />} nativeButton={false}
+                            size="sm"
                         >
-                            <Icon className="h-5 w-5" />
-                            {label}
-                        </Link>
-                    ))}
-                </div>
-
-                <div className="flex items-center gap-4">
-                    {/* Theme Toggle */}
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2 rounded-xl text-zinc-400 hover:text-white light:text-zinc-600"
-                    >
-                        {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                    </button>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="md:hidden p-2 text-zinc-400 hover:text-white light:text-zinc-600"
-                    >
-                        {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                    </button>
-                </div>
-            </div>
-
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="md:hidden border-t border-zinc-800 light:border-zinc-200 bg-zinc-950 light:bg-white">
-                    <div className="px-6 py-6 flex flex-col gap-6 text-lg">
-                        {navLinks.map(({ href, label, icon: Icon }) => (
-                            <Link
-                                key={href}
-                                href={href}
-                                onClick={() => setIsMenuOpen(false)}
-                                className={`flex items-center gap-3 transition-colors ${pathname === href ? 'text-teach' : 'dark:text-zinc-300 light:text-zinc-700'
-                                    }`}
-                            >
-                                <Icon className="h-6 w-6" />
-                                {label}
-                            </Link>
-                        ))}
+                            <Users className="h-4 w-4" />
+                            Matches
+                        </Button>
+                        <Button
+                            variant={isActive("/messages") ? "default" : "ghost"}
+                            render={<Link href="/messages" />} nativeButton={false}
+                            size="sm"
+                        >
+                            <MessageSquare className="h-4 w-4" />
+                            Messages
+                        </Button>
+                        <Button
+                            variant={isActive("/profile") ? "default" : "ghost"}
+                            render={<Link href="/profile" />} nativeButton={false}
+                            size="sm"
+                        >
+                            <User className="h-4 w-4" />
+                            Profile
+                        </Button>
                     </div>
-                </div>
-            )}
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <Button variant="ghost" render={<Link href="/login" />} nativeButton={false} size="sm">
+                            Log In
+                        </Button>
+                        <Button className="gradient-primary" render={<Link href="/signup" />} nativeButton={false} size="sm">
+                            Sign Up
+                        </Button>
+                    </div>
+                )}
+            </div>
         </nav>
     );
-}
+};
+
+export default Navbar;

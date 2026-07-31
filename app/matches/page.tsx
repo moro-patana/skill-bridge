@@ -1,109 +1,147 @@
-'use client';
+"use client";
 
-import Navbar from '../components/Navbar';
-import { MapPin, Star, MessageCircle } from 'lucide-react';
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Navbar from "@/components/Navbar";
+import { MapPin, MessageSquare, Star } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const mockMatches = [
     {
-        id: '1',
-        name: "Sarah Chen",
-        avatar: "https://i.pravatar.cc/150?img=1",
-        location: "Antananarivo",
+        id: 1,
+        name: "Sarah Martinez",
+        location: "Austin, TX",
+        bio: "Professional photographer with 5 years of experience. Love teaching composition and lighting!",
+        teaches: ["Photography", "Lightroom", "Portrait Photography"],
+        learns: ["React", "Web Development"],
         rating: 4.9,
-        teachSkill: "React + TypeScript",
-        learnSkill: "Portrait Photography",
-        bio: "Professional photographer who wants to build modern web apps.",
+        matchPercentage: 95,
     },
     {
-        id: '2',
-        name: "Rivo Andrian",
-        avatar: "https://i.pravatar.cc/150?img=2",
-        location: "Toamasina",
-        rating: 4.7,
-        teachSkill: "UI/UX Design",
-        learnSkill: "Node.js Backend",
-        bio: "Designer turned developer. Love clean interfaces and good coffee.",
+        id: 2,
+        name: "David Kim",
+        location: "Seattle, WA",
+        bio: "Classical guitarist and music theory enthusiast. Always excited to share my passion.",
+        teaches: ["Guitar", "Music Theory", "Classical Guitar"],
+        learns: ["TypeScript", "Node.js"],
+        rating: 4.8,
+        matchPercentage: 88,
     },
     {
-        id: '3',
-        name: "Anja Rakoto",
-        avatar: "https://i.pravatar.cc/150?img=3",
-        location: "Antananarivo",
+        id: 3,
+        name: "Maria Rodriguez",
+        location: "Miami, FL",
+        bio: "Native Spanish speaker and certified language teacher. ¡Vamos a aprender!",
+        teaches: ["Spanish", "Latin American Culture", "Conversational Spanish"],
+        learns: ["React", "TypeScript"],
         rating: 5.0,
-        teachSkill: "French Language",
-        learnSkill: "Digital Marketing",
-        bio: "French teacher who wants to grow her online presence.",
+        matchPercentage: 92,
+    },
+    {
+        id: 4,
+        name: "James Wilson",
+        location: "Boston, MA",
+        bio: "UX designer who loves teaching design principles and Figma workflows.",
+        teaches: ["UI/UX Design", "Figma", "Design Systems"],
+        learns: ["Node.js", "Backend Development"],
+        rating: 4.7,
+        matchPercentage: 78,
     },
 ];
 
-export default function Matches() {
+const Matches = () => {
+    const handleConnect = (name: string) => {
+        toast({
+            title: "Connection request sent!",
+            description: `Your request to connect with ${name} has been sent.`,
+        });
+    };
+
     return (
-        <>
+        <div className="min-h-screen bg-background">
             <Navbar />
-            <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
-                <div className="mb-10">
-                    <h1 className="text-4xl font-bold text-foreground mb-2">Find Your Next Swap</h1>
-                    <p className="text-muted-foreground">People who can teach what you want to learn</p>
+
+            <div className="container mx-auto px-4 py-8">
+                <div className="mb-8">
+                    <h1 className="mb-2 text-4xl font-display font-bold">Your Matches</h1>
+                    <p className="text-lg text-muted-foreground">
+                        People who can teach what you want to learn, and vice versa
+                    </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid gap-6 md:grid-cols-2">
                     {mockMatches.map((match) => (
-                        <div
-                            key={match.id}
-                            className="bg-card border border-border rounded-3xl overflow-hidden hover:border-teach/50 transition-all group"
-                        >
-                            <div className="p-6">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <img
-                                        src={match.avatar}
-                                        alt={match.name}
-                                        className="w-16 h-16 rounded-full object-cover"
-                                    />
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-xl text-foreground">{match.name}</h3>
-                                        <div className="flex items-center gap-1 text-muted-foreground text-sm">
-                                            <MapPin className="h-4 w-4" />
+                        <Card key={match.id} className="group relative overflow-hidden p-6 shadow-card transition-all hover:shadow-glow hover:border-primary/50">
+                            {/* Match Percentage Badge */}
+                            <div className="absolute top-4 right-4">
+                                <Badge className="gradient-primary text-sm font-bold">
+                                    {match.matchPercentage}% Match
+                                </Badge>
+                            </div>
+
+                            <div className="flex items-start gap-4 mb-4">
+                                <Avatar className="h-16 w-16 border-2 border-primary/20">
+                                    <AvatarFallback className="bg-gradient-primary text-xl font-bold text-primary-foreground">
+                                        {match.name.split(" ").map((n) => n[0]).join("")}
+                                    </AvatarFallback>
+                                </Avatar>
+
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-display font-bold mb-1">{match.name}</h3>
+                                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                        <div className="flex items-center gap-1">
+                                            <MapPin className="h-3.5 w-3.5" />
                                             {match.location}
                                         </div>
-                                    </div>
-                                    <div className="flex items-center gap-1 text-amber-400">
-                                        <Star className="h-5 w-5 fill-current" />
-                                        <span className="font-medium">{match.rating}</span>
-                                    </div>
-                                </div>
-
-                                {/* Skill Swap Box */}
-                                <div className="bg-zinc-950 dark:bg-zinc-950 light:bg-zinc-100 border border-border rounded-2xl p-5 mb-6">
-                                    <div className="flex justify-between items-center">
-                                        <div className="text-center flex-1">
-                                            <div className="text-teach text-xs mb-1 tracking-widest">YOU TEACH</div>
-                                            <div className="font-medium text-emerald-300 dark:text-emerald-300 light:text-emerald-700">
-                                                {match.teachSkill}
-                                            </div>
-                                        </div>
-
-                                        <div className="text-4xl text-bridge mx-4">↔</div>
-
-                                        <div className="text-center flex-1">
-                                            <div className="text-learn text-xs mb-1 tracking-widest">YOU LEARN</div>
-                                            <div className="font-medium text-indigo-300 dark:text-indigo-300 light:text-indigo-700">
-                                                {match.learnSkill}
-                                            </div>
+                                        <div className="flex items-center gap-1">
+                                            <Star className="h-3.5 w-3.5 fill-primary text-primary" />
+                                            {match.rating}
                                         </div>
                                     </div>
                                 </div>
-
-                                <p className="text-muted-foreground text-sm line-clamp-2 mb-6">{match.bio}</p>
-
-                                <button className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-teach to-learn py-3.5 rounded-2xl font-medium text-white hover:brightness-110 transition-all">
-                                    <MessageCircle className="h-5 w-5" />
-                                    Start Conversation
-                                </button>
                             </div>
-                        </div>
+
+                            <p className="text-sm text-muted-foreground mb-4">{match.bio}</p>
+
+                            <div className="space-y-3 mb-4">
+                                <div>
+                                    <p className="text-xs font-medium text-primary mb-2">Can teach you:</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {match.teaches.map((skill) => (
+                                            <Badge key={skill} variant="secondary" className="text-xs">
+                                                {skill}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p className="text-xs font-medium text-secondary mb-2">Wants to learn:</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {match.learns.map((skill) => (
+                                            <Badge key={skill} variant="outline" className="text-xs border-secondary text-secondary">
+                                                {skill}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button
+                                onClick={() => handleConnect(match.name)}
+                                className="w-full gradient-primary"
+                            >
+                                <MessageSquare className="h-4 w-4 mr-2" />
+                                Connect & Start Learning
+                            </Button>
+                        </Card>
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     );
-}
+};
+
+export default Matches;

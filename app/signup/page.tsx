@@ -8,11 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
-<<<<<<< HEAD
 import { toast } from "@/hooks/use-toast";
-=======
-import { toast } from "sonner";
->>>>>>> 5fa265d (built pages and add some styles in the global css)
 
 const Signup = () => {
     const router = useRouter();
@@ -22,7 +18,6 @@ const Signup = () => {
         password: "",
         confirmPassword: "",
     });
-<<<<<<< HEAD
 
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -39,43 +34,6 @@ const Signup = () => {
             description: "Let's set up your profile.",
         });
         router.push("/profile");
-=======
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (formData.password !== formData.confirmPassword) {
-            toast.error("Passwords don't match", {
-                description: "Please make sure your passwords match.",
-            });
-            return;
-        }
-
-        if (formData.password.length < 8) {
-            toast.error("Password too short", {
-                description: "Use at least 8 characters.",
-            });
-            return;
-        }
-
-        setIsSubmitting(true);
-        try {
-            // TODO: replace with your actual signup call, e.g.:
-            // await fetch("/api/signup", { method: "POST", body: JSON.stringify(formData) });
-
-            toast.success("Account created!", {
-                description: "Let's set up your profile.",
-            });
-            router.push("/profile");
-        } catch (err) {
-            toast.error("Something went wrong", {
-                description: err instanceof Error ? err.message : "Please try again.",
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
->>>>>>> 5fa265d (built pages and add some styles in the global css)
     };
 
     return (
@@ -124,10 +82,6 @@ const Signup = () => {
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
-<<<<<<< HEAD
-=======
-                            minLength={8}
->>>>>>> 5fa265d (built pages and add some styles in the global css)
                         />
                     </div>
 
@@ -143,13 +97,8 @@ const Signup = () => {
                         />
                     </div>
 
-<<<<<<< HEAD
                     <Button type="submit" className="w-full gradient-primary">
                         Sign Up
-=======
-                    <Button type="submit" className="w-full gradient-primary" disabled={isSubmitting}>
-                        {isSubmitting ? "Creating account..." : "Sign Up"}
->>>>>>> 5fa265d (built pages and add some styles in the global css)
                     </Button>
 
                     <p className="text-center text-sm text-muted-foreground">
@@ -164,8 +113,4 @@ const Signup = () => {
     );
 };
 
-<<<<<<< HEAD
 export default Signup;
-=======
-export default Signup;
->>>>>>> 5fa265d (built pages and add some styles in the global css)

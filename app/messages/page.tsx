@@ -100,8 +100,8 @@ const Messages = () => {
                                         key={conv.id}
                                         onClick={() => setSelectedChat(conv)}
                                         className={`w-full text-left p-3 rounded-lg transition-colors ${selectedChat.id === conv.id
-                                                ? "bg-primary/10 border border-primary/20"
-                                                : "hover:bg-muted"
+                                            ? "bg-primary/10 border border-primary/20"
+                                            : "hover:bg-muted"
                                             }`}
                                     >
                                         <div className="flex items-start gap-3">
@@ -152,8 +152,8 @@ const Messages = () => {
                                     >
                                         <div
                                             className={`max-w-[70%] rounded-2xl px-4 py-2 ${msg.isOwn
-                                                    ? "bg-gradient-primary text-primary-foreground"
-                                                    : "bg-muted text-foreground"
+                                                ? "bg-gradient-primary text-primary-foreground"
+                                                : "bg-muted text-foreground"
                                                 }`}
                                         >
                                             <p className="text-sm">{msg.message}</p>
